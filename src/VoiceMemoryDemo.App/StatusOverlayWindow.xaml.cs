@@ -30,6 +30,8 @@ public partial class StatusOverlayWindow : Window
     private readonly BitmapSource _spriteSheet;
     private OverlayMode _mode = OverlayMode.DailyInput;
     private string _sourceTitle = "连接中";
+    private string _targetLanguage = "en";
+    private bool _translationEnabled;
 
     public StatusOverlayWindow()
     {
@@ -56,6 +58,13 @@ public partial class StatusOverlayWindow : Window
     {
         _mode = meetingMode ? OverlayMode.MeetingMinutes : OverlayMode.DailyInput;
         ApplyModeChrome();
+    }
+
+    public void SetOutputLanguage(string targetLanguage, bool translationEnabled)
+    {
+        _targetLanguage = string.IsNullOrWhiteSpace(targetLanguage) ? "en" : targetLanguage;
+        _translationEnabled = translationEnabled;
+        ApplyOutputLanguageBadge();
     }
 
     public void ShowConnectedThenListening()
@@ -154,6 +163,7 @@ public partial class StatusOverlayWindow : Window
         HotkeyText.Text = meeting
             ? UiLanguageService.Text("左 Alt", "Left Alt")
             : UiLanguageService.Text("右 Alt", "Right Alt");
+        ApplyOutputLanguageBadge();
 
         var rail = meeting ? Color.FromRgb(117, 141, 167) : Color.FromRgb(213, 154, 89);
         var label = meeting ? Color.FromRgb(174, 200, 231) : Color.FromRgb(230, 183, 121);
@@ -166,6 +176,36 @@ public partial class StatusOverlayWindow : Window
         HotkeyText.Foreground = new SolidColorBrush(label);
         HotkeyBox.BorderBrush = new SolidColorBrush(rail) { Opacity = 0.58 };
         ShellBorder.Background = new SolidColorBrush(shell);
+    }
+
+    private void ApplyOutputLanguageBadge()
+    {
+        var meeting = _mode == OverlayMode.MeetingMinutes;
+        OutputLanguageBadge.Visibility = meeting ? Visibility.Collapsed : Visibility.Visible;
+        if (meeting) return;
+
+        if (!_translationEnabled)
+        {
+            OutputLanguageText.Text = UiLanguageService.Text("保持原文", "OUTPUT: ORIGINAL");
+            return;
+        }
+
+        var languageName = UiLanguageService.IsEnglish
+            ? _targetLanguage.ToLowerInvariant() switch
+            {
+                "zh" => "CHINESE",
+                "ja" => "JAPANESE",
+                "ko" => "KOREAN",
+                "fr" => "FRENCH",
+                "de" => "GERMAN",
+                "es" => "SPANISH",
+                "ru" => "RUSSIAN",
+                _ => "ENGLISH"
+            }
+            : DeepSeekTextService.GetTargetLanguageName(_targetLanguage);
+        OutputLanguageText.Text = UiLanguageService.IsEnglish
+            ? $"OUTPUT: {languageName}"
+            : $"输出为{languageName}";
     }
 
     private static BitmapSource LoadSpriteSheet()

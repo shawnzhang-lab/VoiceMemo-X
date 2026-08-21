@@ -1,8 +1,10 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using VoiceMemoryDemo.App;
 using VoiceMemoryDemo.App.Models;
 using VoiceMemoryDemo.App.Services;
@@ -10,7 +12,7 @@ using VoiceMemoryDemo.App.Services;
 internal static class Program
 {
     [STAThread]
-    private static int Main()
+    private static int Main(string[] args)
     {
     UiLanguageService.Initialize();
     UiLanguageService.SetLanguage(UiLanguageService.English);
@@ -39,6 +41,7 @@ internal static class Program
     try
     {
         AssertLanguageComboBoxes();
+        overlay.SetOutputLanguage("en", translationEnabled: true);
 
         AssertOverlay(overlay, false, "连接中", OverlayVisualState.Connecting, "Connecting to speech service");
         AssertOverlay(overlay, false, "请输入语音", OverlayVisualState.Listening, "Speak now");
@@ -57,12 +60,37 @@ internal static class Program
         UiLanguageService.SetLanguage(UiLanguageService.Chinese);
         overlay.RefreshLanguage();
         overlay.SetMode(false);
+        overlay.SetOutputLanguage("zh", translationEnabled: true);
         overlay.ShowStatus("请输入语音", OverlayVisualState.Listening);
         if (overlay.Width != 404 || UiLanguageService.TextFont.Source != "Microsoft YaHei UI" ||
-            ((TextBlock)overlay.FindName("OverlayTitle")).Text != "请输入语音")
+            ((TextBlock)overlay.FindName("OverlayTitle")).Text != "请输入语音" ||
+            ((TextBlock)overlay.FindName("OutputLanguageText")).Text != "输出为中文")
             throw new InvalidOperationException("Chinese typography did not restore correctly.");
 
-        Console.WriteLine("PASS: bilingual typography and 12 English overlay states are correct.");
+        overlay.SetOutputLanguage("en", translationEnabled: false);
+        if (((TextBlock)overlay.FindName("OutputLanguageText")).Text != "保持原文")
+            throw new InvalidOperationException("The overlay did not expose the disabled translation state.");
+
+        if (args.Contains("--render", StringComparer.OrdinalIgnoreCase))
+        {
+            var outputDirectory = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "artifacts", "ui-smoke"));
+            Directory.CreateDirectory(outputDirectory);
+
+            UiLanguageService.SetLanguage(UiLanguageService.English);
+            overlay.RefreshLanguage();
+            overlay.SetMode(false);
+            overlay.SetOutputLanguage("en", translationEnabled: true);
+            overlay.ShowStatus("请输入语音", OverlayVisualState.Listening);
+            RenderOverlay(overlay, Path.Combine(outputDirectory, "overlay-en-output-english.png"));
+
+            UiLanguageService.SetLanguage(UiLanguageService.Chinese);
+            overlay.RefreshLanguage();
+            overlay.SetOutputLanguage("zh", translationEnabled: true);
+            overlay.ShowStatus("请输入语音", OverlayVisualState.Listening);
+            RenderOverlay(overlay, Path.Combine(outputDirectory, "overlay-zh-output-chinese.png"));
+        }
+
+        Console.WriteLine("PASS: bilingual typography, output-language badges, and 12 English overlay states are correct.");
         return 0;
     }
 
@@ -76,6 +104,19 @@ internal static class Program
         overlay.Close();
         Application.Current.Shutdown();
     }
+    }
+
+    private static void RenderOverlay(Window overlay, string path)
+    {
+        overlay.UpdateLayout();
+        var width = Math.Max(1, (int)Math.Ceiling(overlay.ActualWidth));
+        var height = Math.Max(1, (int)Math.Ceiling(overlay.ActualHeight));
+        var bitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+        bitmap.Render(overlay);
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(bitmap));
+        using var stream = File.Create(path);
+        encoder.Save(stream);
     }
 
     private static void AssertLanguageComboBoxes()
@@ -211,6 +252,8 @@ internal static class Program
     var mode = ((TextBlock)overlay.FindName("ModeLabel")).Text;
     var hint = ((TextBlock)overlay.FindName("OverlayHint")).Text;
     var hotkey = ((TextBlock)overlay.FindName("HotkeyText")).Text;
+    var outputBadge = (Border)overlay.FindName("OutputLanguageBadge");
+    var outputLanguage = ((TextBlock)overlay.FindName("OutputLanguageText")).Text;
     var hotkeyElement = (TextBlock)overlay.FindName("HotkeyText");
     var expectedMode = meetingMode ? "MEETING · LEFT ALT" : "DICTATION · RIGHT ALT";
     var expectedHint = meetingMode
@@ -220,6 +263,10 @@ internal static class Program
 
     if (mode != expectedMode || hint != expectedHint || hotkey != expectedHotkey)
         throw new InvalidOperationException($"Overlay chrome mismatch: {mode} | {hint} | {hotkey}.");
+    if (meetingMode && outputBadge.Visibility != Visibility.Collapsed)
+        throw new InvalidOperationException("Meeting overlay should not show the dictation output-language badge.");
+    if (!meetingMode && (outputBadge.Visibility != Visibility.Visible || outputLanguage != "OUTPUT: ENGLISH"))
+        throw new InvalidOperationException($"Dictation output-language badge mismatch: {outputLanguage}.");
     if (overlay.Width != 440 || hotkeyElement.TextWrapping != TextWrapping.NoWrap ||
         hotkeyElement.FontFamily.Source != "Segoe UI Variable Display")
         throw new InvalidOperationException("English overlay typography or hotkey width was not applied.");

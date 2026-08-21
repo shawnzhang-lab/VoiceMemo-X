@@ -1,7 +1,7 @@
 # GitHub 上传前整体排查
 
-日期：2026-08-21  
-版本：0.9.10  
+日期：2026-08-21
+版本：0.9.11
 结论：**技术源码包与许可证边界通过；项目所有者已授权发布源码。最终角色已完成人工视觉复核，可公开，但该复核不是法律意见。**
 
 ## 1. 已通过
@@ -10,13 +10,13 @@
 |---|---|
 | Windows Release 构建 | PASS，0 警告、0 错误 |
 | 公开测试工程编译 | PASS，11/11 |
-| 离线 UI 本地化 | PASS，中英文和 12 种英文悬浮状态 |
+| 离线 UI 本地化 | PASS，中英文、12 种英文悬浮状态和输出语言标识 |
 | 本地纠错词典 CRUD | PASS |
 | 会议报告解析/渲染 | PASS |
 | 中英文会议模板本地校验 | PASS |
 | NuGet 已知漏洞 | PASS，未发现 |
 | NuGet 已弃用依赖 | PASS，未发现 |
-| 公开文件 allowlist | PASS，152 个文件，约 11.43 MB |
+| 公开文件 allowlist | PASS，154 个文件，约 11.46 MB |
 | 高置信度密钥/私钥/个人路径/手机号扫描 | PASS |
 | Markdown 本地链接 | PASS |
 | GitHub 源码 ZIP 逐文件哈希与解压复核 | PASS |
@@ -26,7 +26,7 @@
 
 ## 2. 当前不应对外宣称已通过
 
-- 本轮没有重新调用腾讯 ASR 或 Speaker 2.0。会议模板回归误触发过 1 次短文本 DeepSeek 调用（约 6.4 秒、无音频），其余发布检查均为本地离线测试；后续模板检查固定使用 `--validate-only`。
+- 本轮没有重新调用腾讯 ASR 或 Speaker 2.0。为验证目标语言链路，执行了 4 条短文本 DeepSeek 冒烟用例，其中 1 条为中文转英文；其余发布检查均为本地离线测试。
 - 没有重新运行依赖真实麦克风、系统回环或第三方软件输入框的硬件/桌面自动化测试。
 - Android 源码仍包含在仓库中，但当前网络环境对 Google Maven 出现 TLS/依赖解析失败，因此本轮没有得到新的 Android 全量构建 PASS；这不影响 Windows 源码包，但 Android Demo 不应在本轮 Release notes 中宣称已重新验证。
 - Windows 可执行文件尚未代码签名，旧本地 QA ZIP 不得当作正式 Release 附件。
@@ -57,7 +57,7 @@
 
 源码仓库和 Lite Windows ZIP 均排除了模型权重，因此可以发布。包含 E5、Silero VAD、CAMPPlus、pyannote 等模型权重的完整 Windows ZIP 仍需逐文件确认权重许可证、来源 revision、SHA-256 和随包 NOTICE。未完成前：
 
-- 只上传从公开源码包干净构建的 `VoiceMemo-X-0.9.10-win-x64-lite.zip`；
+- 只上传从公开源码包干净构建的 `VoiceMemo-X-0.9.11-win-x64-lite.zip`；
 - 不上传任何包含未复核模型权重的完整包；
 - 不上传旧 APK 作为正式版本；
 - Release notes 明确 Lite 包的降级边界和 SmartScreen 风险。
