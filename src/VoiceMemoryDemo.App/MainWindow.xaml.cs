@@ -185,6 +185,7 @@ public partial class MainWindow : Window
         if (!_recording)
         {
             _overlay?.SetMode(meetingMode);
+            _overlay?.SetOutputLanguage(_settings.TargetLanguage, _settings.EnableTranslation);
             _settings.EnableMeetingMode = meetingMode;
             _settings.CaptureSystemAudioInMeeting = true;
             MeetingModeCheckBox.IsChecked = meetingMode;
@@ -523,6 +524,8 @@ public partial class MainWindow : Window
 
     private Task BeginRecordingAsync()
     {
+        _overlay?.SetMode(_settings.EnableMeetingMode);
+        _overlay?.SetOutputLanguage(_settings.TargetLanguage, _settings.EnableTranslation);
         if (!_settings.HasTencentCredentials)
         {
             throw new InvalidOperationException("还没有配置腾讯云 ASR。请先到“连接设置”填写 AppID、SecretID 和 SecretKey 并保存。 ");
@@ -864,6 +867,15 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             aiWarning = ToFriendlyMessage(ex);
+            DiagnosticLogService.Write("DeepSeekRefine", ex);
+            if (_settings.EnableTranslation)
+            {
+                throw new InvalidOperationException(
+                    UiLanguageService.IsEnglish
+                        ? $"Translation to {GetLocalizedTargetLanguageName(_settings.TargetLanguage)} failed. The Chinese transcript was not inserted: {aiWarning}"
+                        : $"翻译为{DeepSeekTextService.GetTargetLanguageName(_settings.TargetLanguage)}失败，已阻止把中文原文误当成翻译结果输入：{aiWarning}",
+                    ex);
+            }
             finalText = rawText;
         }
 
@@ -1223,6 +1235,7 @@ public partial class MainWindow : Window
             .OfType<System.Windows.Controls.ComboBoxItem>()
             .FirstOrDefault(item => string.Equals(item.Tag as string, _settings.TargetLanguage, StringComparison.OrdinalIgnoreCase));
         TargetLanguageComboBox.SelectedItem = selectedLanguage ?? TargetLanguageComboBox.Items[0];
+        SyncOverlayOutputLanguage();
         SaveHistoryCheckBox.IsChecked = _settings.SaveHistory;
         UpdateMeetingModeUi();
         UpdateConfigStatus();
@@ -1254,6 +1267,7 @@ public partial class MainWindow : Window
             SaveHistory = SaveHistoryCheckBox.IsChecked == true
         };
         _settingsStore.Save(_settings);
+        SyncOverlayOutputLanguage();
         UpdateConfigStatus();
         _ = WarmConnectionsAsync();
         SetStatus("设置已保存", "连接信息已安全保存在本机", "现在可以切回任意输入框按右 Alt 测试。", "#5ED79A");
@@ -1329,6 +1343,7 @@ public partial class MainWindow : Window
             "切换客户端、通知和悬浮框语言",
             "Switch the interface, notifications, and status overlay language");
         _overlay?.RefreshLanguage();
+        SyncOverlayOutputLanguage();
         RefreshTrayLanguage();
         UpdateAutoStartStatus();
         UpdateMeetingModeUi();
@@ -1722,6 +1737,24 @@ public partial class MainWindow : Window
 
     private void TargetLanguageComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
+        if (_settingsReady && e.AddedItems.Count > 0)
+        {
+            // The target-language selector is the user's primary intent. Do not
+            // leave it in a misleading state where it says "English" while the
+            // independent translation flag still silently outputs Chinese.
+            EnableTranslationCheckBox.IsChecked = true;
+        }
+        SaveHomepageOptions();
+    }
+
+    private void TargetLanguageComboBox_DropDownOpened(object? sender, EventArgs e)
+    {
+        if (!_settingsReady) return;
+
+        // SelectionChanged does not fire when the user re-selects the currently
+        // visible option. Opening this dedicated target-language control still
+        // expresses the intent to use translation, so activate it immediately.
+        EnableTranslationCheckBox.IsChecked = true;
         SaveHomepageOptions();
     }
 
@@ -1740,6 +1773,17 @@ public partial class MainWindow : Window
         _settings.TargetLanguage = GetSelectedTargetLanguage();
         TencentEngineBox.Text = _settings.TencentEngineModel;
         _settingsStore.Save(_settings);
+        SyncOverlayOutputLanguage();
+        DiagnosticLogService.WriteEvent(
+            "OutputLanguageSettings",
+            $"translation={_settings.EnableTranslation}; target={_settings.TargetLanguage}; input={_settings.InputLanguage}");
+    }
+
+    private void SyncOverlayOutputLanguage()
+    {
+        _overlay?.SetOutputLanguage(
+            GetSelectedTargetLanguage(),
+            EnableTranslationCheckBox.IsChecked == true);
     }
 
     private string GetSelectedInputLanguage()

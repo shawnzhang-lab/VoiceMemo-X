@@ -500,8 +500,9 @@
                                     <TextBlock Text="输出语言" Foreground="#78818D" FontSize="10" Margin="2,0,0,7" />
                                     <ComboBox x:Name="TargetLanguageComboBox" Height="40" Style="{StaticResource LanguageComboBoxStyle}"
                                               IsEditable="False" IsTextSearchEnabled="True"
+                                              DropDownOpened="TargetLanguageComboBox_DropDownOpened"
                                               SelectionChanged="TargetLanguageComboBox_SelectionChanged"
-                                              ToolTip="开启语言转换后生效">
+                                              ToolTip="选择目标语言后会自动开启语言转换">
                                         <ComboBoxItem Content="中文" Tag="zh" />
                                         <ComboBoxItem Content="英语 English" Tag="en" IsSelected="True" />
                                         <ComboBoxItem Content="日语 日本語" Tag="ja" />

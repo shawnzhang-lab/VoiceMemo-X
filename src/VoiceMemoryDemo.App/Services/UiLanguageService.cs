@@ -66,6 +66,7 @@ public static class UiLanguageService
         ["韩语 한국어"] = "Korean 한국어",
         ["输出语言"] = "Output language",
         ["开启语言转换后生效"] = "Used when output translation is enabled",
+        ["选择目标语言后会自动开启语言转换"] = "Choosing a target language automatically enables translation",
         ["中文"] = "Chinese",
         ["法语 Français"] = "French Français",
         ["德语 Deutsch"] = "German Deutsch",

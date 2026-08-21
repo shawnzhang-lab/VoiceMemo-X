@@ -65,5 +65,26 @@ foreach (var sample in samples)
     }
 }
 
-Console.WriteLine("PASS: smart structuring preserves short sentences and numbers genuine multi-point speech.");
+settings.EnableTranslation = true;
+settings.TargetLanguage = "en";
+var translationInput = "请把明天下午三点的产品会议改到四点，并提醒李明参加。";
+var translationOutput = await service.RefineAsync(
+    translationInput,
+    new MemoryContext(),
+    settings,
+    "translation-smoke");
+var translationPassed = !Regex.IsMatch(translationOutput, @"\p{IsCJKUnifiedIdeographs}") &&
+                        translationOutput.Contains("meeting", StringComparison.OrdinalIgnoreCase) &&
+                        (translationOutput.Contains("four", StringComparison.OrdinalIgnoreCase) ||
+                         Regex.IsMatch(translationOutput, @"\b4\b"));
+Console.WriteLine($"CASE zh-to-en-translation: passed={translationPassed}");
+Console.WriteLine(translationOutput);
+Console.WriteLine("---");
+if (!translationPassed)
+{
+    Console.Error.WriteLine("FAIL: zh-to-en-translation");
+    return 1;
+}
+
+Console.WriteLine("PASS: smart structuring and Chinese-to-English translation met the smoke-test contract.");
 return 0;
