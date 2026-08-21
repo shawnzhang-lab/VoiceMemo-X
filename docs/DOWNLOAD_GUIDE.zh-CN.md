@@ -7,8 +7,8 @@
 只有项目 GitHub 页面右侧出现 **Releases**，且 Release 附件中存在类似以下文件时，才代表发布了可运行版本：
 
 ```text
-VoiceMemo-X-0.9.11-win-x64-lite.zip
-VoiceMemo-X-0.9.11-win-x64-lite.zip.sha256
+VoiceMemo-X-0.9.12-win-x64-lite.zip
+VoiceMemo-X-0.9.12-win-x64-lite.zip.sha256
 ```
 
 步骤：
@@ -19,7 +19,7 @@ VoiceMemo-X-0.9.11-win-x64-lite.zip.sha256
 4. 打开 PowerShell，运行：
 
    ```powershell
-   Get-FileHash "$HOME\Downloads\VoiceMemo-X-0.9.11-win-x64-lite.zip" -Algorithm SHA256
+   Get-FileHash "$HOME\Downloads\VoiceMemo-X-0.9.12-win-x64-lite.zip" -Algorithm SHA256
    ```
 
 5. 把结果与 `.sha256` 文件中的值比较；完全一致后再解压。
