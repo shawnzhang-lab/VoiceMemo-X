@@ -53,7 +53,6 @@
                                           Foreground="{TemplateBinding Foreground}"
                                           FontFamily="{TemplateBinding FontFamily}"
                                           FontSize="{TemplateBinding FontSize}"
-                                          Content="{Binding SelectedItem.Content, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -62,14 +61,6 @@
                                                 BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}"
                                                 CornerRadius="10">
                                             <Grid>
-                                                <TextBlock x:Name="SelectedLanguageText"
-                                                           Margin="{Binding Padding, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}"
-                                                           VerticalAlignment="Center" HorizontalAlignment="Left"
-                                                           Foreground="{TemplateBinding Foreground}"
-                                                           FontFamily="{TemplateBinding FontFamily}"
-                                                           FontSize="{TemplateBinding FontSize}"
-                                                           Text="{Binding Content, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                           TextWrapping="Wrap" />
                                                 <Border Width="30" HorizontalAlignment="Right" Background="#162330" CornerRadius="0,9,9,0">
                                                     <Path x:Name="Arrow" Data="M 0 0 L 4 4 L 8 0" Stroke="#9FB4C5" StrokeThickness="1.6"
                                                           StrokeStartLineCap="Round" StrokeEndLineCap="Round"
@@ -92,6 +83,16 @@
                                     </ControlTemplate>
                                 </ToggleButton.Template>
                             </ToggleButton>
+
+                            <TextBlock x:Name="SelectedLanguageText"
+                                       IsHitTestVisible="False"
+                                       Margin="{TemplateBinding Padding}"
+                                       VerticalAlignment="Center" HorizontalAlignment="Left"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       Text="{Binding SelectedItem.Content, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                       TextWrapping="Wrap" />
 
                             <Popup x:Name="PART_Popup" Placement="Bottom" AllowsTransparency="True"
                                    Focusable="False" StaysOpen="False" PopupAnimation="Fade"

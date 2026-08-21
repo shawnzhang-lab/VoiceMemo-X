@@ -54,7 +54,7 @@
 
 ## 快速开始
 
-普通用户可在 [Releases](https://github.com/shawnzhang-lab/VoiceMemo-X/releases) 下载 `VoiceMemo-X-0.9.12-win-x64-lite.zip` 和同名 `.sha256` 文件。Lite 包不含本地 ONNX 模型权重，但日常云端语音输入、翻译和会议报告仍可使用；本地语义向量与本地说话人数预判会降级。
+普通用户可在 [Releases](https://github.com/shawnzhang-lab/VoiceMemo-X/releases) 下载 `VoiceMemo-X-0.9.13-win-x64-lite.zip` 和同名 `.sha256` 文件。Lite 包不含本地 ONNX 模型权重，但日常云端语音输入、翻译和会议报告仍可使用；本地语义向量与本地说话人数预判会降级。
 
 源码运行环境：Windows 10/11 x64，.NET 8 SDK；云端功能需要腾讯云 ASR 和 DeepSeek API 账户。
 
@@ -136,4 +136,4 @@ Android Demo 的构建与限制见 [android/VoiceMemoryDemo.Android/README.md](a
 
 ## 状态
 
-当前版本：`0.9.12`，定位仍是可运行 Demo，不建议直接作为面向公众的托管服务后端。
+当前版本：`0.9.13`，定位仍是可运行 Demo，不建议直接作为面向公众的托管服务后端。

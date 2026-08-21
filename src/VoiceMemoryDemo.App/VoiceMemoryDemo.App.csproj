@@ -12,7 +12,7 @@
     <Product>速说速记X</Product>
     <Description>右 Alt 日常语音输入、左 Alt 实时会议纪要与本地记忆助手</Description>
     <ApplicationIcon>Assets\app-icon-xiaoye-v4.ico</ApplicationIcon>
-    <Version>0.9.12</Version>
+    <Version>0.9.13</Version>
   </PropertyGroup>
 
   <ItemGroup>

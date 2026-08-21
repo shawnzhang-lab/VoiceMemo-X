@@ -1235,6 +1235,7 @@ public partial class MainWindow : Window
             .OfType<System.Windows.Controls.ComboBoxItem>()
             .FirstOrDefault(item => string.Equals(item.Tag as string, _settings.TargetLanguage, StringComparison.OrdinalIgnoreCase));
         TargetLanguageComboBox.SelectedItem = selectedLanguage ?? TargetLanguageComboBox.Items[0];
+        RefreshLanguageComboBoxDisplays();
         SyncOverlayOutputLanguage();
         SaveHistoryCheckBox.IsChecked = _settings.SaveHistory;
         UpdateMeetingModeUi();
@@ -1333,6 +1334,7 @@ public partial class MainWindow : Window
     private void ApplyUiLanguage()
     {
         UiLanguageService.Apply(this);
+        RefreshLanguageComboBoxDisplays();
         AppTitleText.FontSize = UiLanguageService.IsEnglish ? 23 : 22;
         HomeSectionTitleText.FontSize = UiLanguageService.IsEnglish ? 24 : 23;
         DailyHotkeyTitleText.FontSize = UiLanguageService.IsEnglish ? 18.5 : 22;
@@ -1737,6 +1739,7 @@ public partial class MainWindow : Window
 
     private void TargetLanguageComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
+        RefreshLanguageComboBoxDisplay(sender as System.Windows.Controls.ComboBox);
         if (_settingsReady && e.AddedItems.Count > 0)
         {
             // The target-language selector is the user's primary intent. Do not
@@ -1760,7 +1763,29 @@ public partial class MainWindow : Window
 
     private void InputLanguageComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
+        RefreshLanguageComboBoxDisplay(sender as System.Windows.Controls.ComboBox);
         SaveHomepageOptions();
+    }
+
+    private void RefreshLanguageComboBoxDisplays()
+    {
+        RefreshLanguageComboBoxDisplay(InputLanguageComboBox);
+        RefreshLanguageComboBoxDisplay(TargetLanguageComboBox);
+    }
+
+    private static void RefreshLanguageComboBoxDisplay(System.Windows.Controls.ComboBox? comboBox)
+    {
+        if (comboBox?.SelectedItem is not System.Windows.Controls.ComboBoxItem selectedItem)
+            return;
+
+        comboBox.ApplyTemplate();
+        if (comboBox.Template.FindName("SelectedLanguageText", comboBox) is System.Windows.Controls.TextBlock selectedText)
+        {
+            // Keep the visible field in the ComboBox template itself. The old
+            // nested ToggleButton binding could remain on its startup label
+            // even though ComboBox.SelectedItem and saved settings changed.
+            selectedText.Text = selectedItem.Content?.ToString() ?? string.Empty;
+        }
     }
 
     private void SaveHomepageOptions()
