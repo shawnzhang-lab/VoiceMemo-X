@@ -1,0 +1,22 @@
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{cs,csproj,ps1,sln,xaml}]
+end_of_line = crlf
+
+[*.{java,gradle,md,yml,yaml,json,xml}]
+end_of_line = lf
+
+[*.cs]
+indent_style = space
+indent_size = 4
+dotnet_style_qualification_for_field = false:suggestion
+csharp_style_namespace_declarations = file_scoped:suggestion
+
+[*.{json,yml,yaml}]
+indent_style = space
+indent_size = 2

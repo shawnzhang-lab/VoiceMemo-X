@@ -1,0 +1,97 @@
+# Build outputs and package artifacts
+**/bin/
+**/obj/
+**/build/
+**/.gradle/
+/publish/
+/artifacts/
+/tmp/
+/--settings-only/
+
+# Downloaded toolchains and local SDK state
+/tools/
+local.properties
+
+# Models: keep only source/license metadata in Git
+/Models/multilingual-e5-small/*
+!/Models/multilingual-e5-small/LOCAL_MODEL_INFO.md
+!/Models/multilingual-e5-small/MODEL_CARD.md
+/Models/speaker-router/*
+!/Models/speaker-router/MODEL_INFO.md
+!/Models/speaker-router/sherpa-onnx-pyannote-segmentation-3-0/
+/Models/speaker-router/sherpa-onnx-pyannote-segmentation-3-0/*
+!/Models/speaker-router/sherpa-onnx-pyannote-segmentation-3-0/LICENSE
+!/Models/speaker-router/sherpa-onnx-pyannote-segmentation-3-0/README.md
+
+# Private/large evaluation corpora and results
+/test-data/
+/test-results/
+/tests/__pycache__/
+/tests/*.py
+/tests/VoiceMemoryDemo.EnglishAsrBenchmark/
+/tests/VoiceMemoryDemo.EnglishAsrBenchmarkV22/
+/tests/VoiceMemoryDemo.EnglishAsrBenchmarkV22.Evaluator/
+/tests/VoiceMemoryDemo.EnglishAsrDictionaryDevReplay/
+/tests/VoiceMemoryDemo.EnglishE2E/
+
+# Non-production character explorations and local QA captures
+/src/VoiceMemoryDemo.App/Assets/CharacterCandidates/
+/qa-*.png
+/*.png
+/*.jpg
+/*.jpeg
+
+# User secrets, state, databases and logs
+*.keystore
+*.jks
+*.pfx
+*.p12
+*.cer
+*.pem
+*.key
+*.db
+*.db-shm
+*.db-wal
+settings.dat
+diagnostics.log
+speaker-router.jsonl
+*.log
+*.jsonl
+*.aesgcm
+*.dmp
+*.pdb
+appsettings.Local.json
+secrets.json
+.env
+.env.*
+!.env.example
+
+# Local recordings and archives must be attached to Releases, never committed
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.wma
+*.flac
+*.mp4
+*.mov
+*.m4v
+*.avi
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tar.bz2
+*.onnx
+*.safetensors
+
+# IDE and OS files
+.idea/
+.vs/
+.vscode/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>速说速记X</AssemblyName>
+    <RootNamespace>VoiceMemoryDemo.App</RootNamespace>
+    <Product>速说速记X</Product>
+    <Description>右 Alt 日常语音输入、左 Alt 实时会议纪要与本地记忆助手</Description>
+    <ApplicationIcon>Assets\app-icon-xiaoye-v4.ico</ApplicationIcon>
+    <Version>0.9.10</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Drawing" />
+    <Using Remove="System.Windows.Forms" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.10" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.28.0" />
+    <PackageReference Include="NAudio" Version="2.3.0" />
+    <PackageReference Include="org.k2fsa.sherpa.onnx" Version="1.13.4" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+    <PackageReference Include="Tokenizers.HuggingFace" Version="3.23.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\app-icon-xiaoye-v4.ico" />
+    <Resource Include="Assets\app-icon-xiaoye-v4.png" />
+    <Resource Include="Assets\character-states-xiaoye-v4.png" />
+    <Resource Include="Assets\ui-background-xiaoye-v1.png" />
+    <Resource Include="Assets\ui-header-xiaoye-v2.png" />
+    <Resource Include="Assets\ui-memory-xiaoye-v1.png" />
+    <Resource Include="Assets\ui-dictionary-header-xiaoye-v2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\Models\multilingual-e5-small\**\*"
+             Exclude="..\..\Models\multilingual-e5-small\model.onnx"
+             Condition="Exists('..\..\Models\multilingual-e5-small')">
+      <Link>Models\multilingual-e5-small\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="..\..\Models\speaker-router\MODEL_INFO.md"
+             Condition="Exists('..\..\Models\speaker-router\MODEL_INFO.md')">
+      <Link>Models\speaker-router\MODEL_INFO.md</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="..\..\Models\speaker-router\silero_vad.onnx"
+             Condition="Exists('..\..\Models\speaker-router\silero_vad.onnx')">
+      <Link>Models\speaker-router\silero_vad.onnx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="..\..\Models\speaker-router\3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx"
+             Condition="Exists('..\..\Models\speaker-router\3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx')">
+      <Link>Models\speaker-router\3dspeaker_speech_campplus_sv_zh_en_16k-common_advanced.onnx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="..\..\Models\speaker-router\sherpa-onnx-pyannote-segmentation-3-0\model.onnx"
+             Condition="Exists('..\..\Models\speaker-router\sherpa-onnx-pyannote-segmentation-3-0\model.onnx')">
+      <Link>Models\speaker-router\sherpa-onnx-pyannote-segmentation-3-0\model.onnx</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Include="..\..\Models\speaker-router\sherpa-onnx-pyannote-segmentation-3-0\LICENSE"
+             Condition="Exists('..\..\Models\speaker-router\sherpa-onnx-pyannote-segmentation-3-0\LICENSE')">
+      <Link>Models\speaker-router\sherpa-onnx-pyannote-segmentation-3-0\LICENSE</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+</Project>

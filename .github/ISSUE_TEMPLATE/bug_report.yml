@@ -1,0 +1,80 @@
+name: Bug report
+description: 报告可稳定复现的问题（请勿粘贴密钥、录音或私人转写）
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。先删除日志中的 API 密钥、真实转写、姓名和会议内容。
+
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      placeholder: 例如 0.9.9
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 功能区域
+      options:
+        - 右 Alt 日常输入
+        - 左 Alt 实时会议
+        - 音视频导入
+        - 会议报告
+        - 本地记忆/纠错词典
+        - 连接设置
+        - Android Demo
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请使用脱敏内容和最短步骤。
+      placeholder: |
+        1. 打开…
+        2. 按…
+        3. 出现…
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: 系统版本
+      placeholder: Windows 11 24H2 x64
+
+  - type: textarea
+    id: sanitized_logs
+    attributes:
+      label: 脱敏日志
+      description: 不要包含密钥、完整路径中的真实姓名、录音、转写或剪贴板正文。
+      render: text
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: 隐私确认
+      options:
+        - label: 我已确认内容中没有 API 密钥、私人录音或未经同意的会议文字。
+          required: true

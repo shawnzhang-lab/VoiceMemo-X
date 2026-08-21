@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Check public repository boundary
+        shell: pwsh
+        run: .\scripts\Test-PublicRelease.ps1 -SkipBuild
+
+      - name: Restore
+        run: dotnet restore .\VoiceMemoryDemo.sln
+
+      - name: Build
+        run: dotnet build .\VoiceMemoryDemo.sln -c Release --no-restore
+
+      - name: Localization smoke test
+        run: dotnet run --project .\tests\VoiceMemoryDemo.LocalizationSmoke\VoiceMemoryDemo.LocalizationSmoke.csproj -c Release
+
+      - name: Local correction dictionary smoke test
+        run: dotnet run --project .\tests\VoiceMemoryDemo.MemorySmoke\VoiceMemoryDemo.MemorySmoke.csproj -c Release
+
+      - name: Meeting report smoke test
+        run: dotnet run --project .\tests\VoiceMemoryDemo.MeetingReportSmoke\VoiceMemoryDemo.MeetingReportSmoke.csproj -c Release
+
+      - name: Meeting template validation
+        run: dotnet run --project .\tests\VoiceMemoryDemo.MeetingTemplateSmoke\VoiceMemoryDemo.MeetingTemplateSmoke.csproj -c Release -- --validate-only
+
+      - name: Reproduce the allowlist-only source package
+        shell: pwsh
+        run: .\scripts\Build-GitHubSourcePackage.ps1 -SkipBuild

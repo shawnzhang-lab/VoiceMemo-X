@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D0CA2ECD-C282-4FBF-ADE1-67B992B93757}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceMemoryDemo.App", "src\VoiceMemoryDemo.App\VoiceMemoryDemo.App.csproj", "{1689693F-1CAE-42FE-B4C2-5496B33A4FC0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1689693F-1CAE-42FE-B4C2-5496B33A4FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1689693F-1CAE-42FE-B4C2-5496B33A4FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1689693F-1CAE-42FE-B4C2-5496B33A4FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1689693F-1CAE-42FE-B4C2-5496B33A4FC0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1689693F-1CAE-42FE-B4C2-5496B33A4FC0} = {D0CA2ECD-C282-4FBF-ADE1-67B992B93757}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,165 @@
+<Window x:Class="VoiceMemoryDemo.App.StatusOverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="404" Height="120" WindowStyle="None" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False"
+        ShowActivated="False" Focusable="False" Topmost="True">
+    <Grid IsHitTestVisible="False" Margin="8">
+        <Border x:Name="ShellBorder" Background="#F2171B22" BorderBrush="#5A6472"
+                BorderThickness="1" CornerRadius="21" Padding="12,10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="22" ShadowDepth="5" Opacity="0.55" Color="#000000" />
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition x:Name="HotkeyColumn" Width="64" />
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="ModeRail" Width="4" Height="72" Background="#D59A59"
+                        CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+                <Grid Grid.Column="1" Width="74" Height="74" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Ellipse x:Name="AccentHalo" Margin="1" Fill="#241ADAF0" Stroke="#804EEAFF" StrokeThickness="2" />
+                    <Border Margin="5" Background="Transparent" ClipToBounds="False">
+                        <Grid>
+                            <Image x:Name="CharacterImage" Stretch="Uniform" RenderTransformOrigin="0.5,0.5">
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform x:Name="CharacterScale" ScaleX="1" ScaleY="1" />
+                                        <RotateTransform x:Name="CharacterRotate" Angle="0" />
+                                        <TranslateTransform x:Name="CharacterTranslate" X="0" Y="0" />
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+
+                            <Canvas Width="66" Height="66" IsHitTestVisible="False">
+                                <Canvas x:Name="ConnectingEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Ellipse x:Name="SignalRingOne" Width="28" Height="9" Canvas.Left="19" Canvas.Top="3"
+                                             Stroke="#B84EEAFF" StrokeThickness="1.4" RenderTransformOrigin="0.5,0.5">
+                                        <Ellipse.RenderTransform><ScaleTransform x:Name="SignalScaleOne" /></Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <Ellipse x:Name="SignalRingTwo" Width="42" Height="14" Canvas.Left="12" Canvas.Top="0"
+                                             Stroke="#804EEAFF" StrokeThickness="1.2" RenderTransformOrigin="0.5,0.5">
+                                        <Ellipse.RenderTransform><ScaleTransform x:Name="SignalScaleTwo" /></Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <Ellipse x:Name="SignalPulseDot" Width="3.5" Height="3.5" Canvas.Left="31.25" Canvas.Top="8"
+                                             Fill="#E8C8FBFF" />
+                                </Canvas>
+
+                                <Canvas x:Name="ListeningEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Ellipse x:Name="ListenDotOne" Width="3" Height="3" Canvas.Left="54" Canvas.Top="28" Fill="#FFFFA45C" />
+                                    <Ellipse x:Name="ListenDotTwo" Width="4" Height="4" Canvas.Left="58" Canvas.Top="25" Fill="#FFFFA45C" />
+                                    <Ellipse x:Name="ListenDotThree" Width="5" Height="5" Canvas.Left="61" Canvas.Top="21" Fill="#FFFFA45C" />
+                                </Canvas>
+
+                                <Canvas x:Name="TranscribingEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Rectangle x:Name="ScribeLineOne" Width="9" Height="1.5" RadiusX="1" RadiusY="1"
+                                               Canvas.Left="4" Canvas.Top="44" Fill="#D9B6A2FF">
+                                        <Rectangle.RenderTransform><TranslateTransform x:Name="ScribeTranslateOne" /></Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle x:Name="ScribeLineTwo" Width="7" Height="1.5" RadiusX="1" RadiusY="1"
+                                               Canvas.Left="6" Canvas.Top="49" Fill="#BFB6A2FF">
+                                        <Rectangle.RenderTransform><TranslateTransform x:Name="ScribeTranslateTwo" /></Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle x:Name="ScribeLineThree" Width="5" Height="1.5" RadiusX="1" RadiusY="1"
+                                               Canvas.Left="8" Canvas.Top="54" Fill="#99B6A2FF">
+                                        <Rectangle.RenderTransform><TranslateTransform x:Name="ScribeTranslateThree" /></Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Ellipse x:Name="InkPulse" Width="3" Height="3" Canvas.Left="16" Canvas.Top="47" Fill="#E8D8C8FF" />
+                                </Canvas>
+
+                                <Canvas x:Name="SuccessEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Path x:Name="SuccessStarOne" Canvas.Left="7" Canvas.Top="11"
+                                          Data="M 4,0 L 5.3,2.7 L 8,4 L 5.3,5.3 L 4,8 L 2.7,5.3 L 0,4 L 2.7,2.7 Z"
+                                          Fill="#E85ED79A" RenderTransformOrigin="0.5,0.5">
+                                        <Path.RenderTransform><ScaleTransform x:Name="SuccessScaleOne" /></Path.RenderTransform>
+                                    </Path>
+                                    <Path x:Name="SuccessStarTwo" Canvas.Left="53" Canvas.Top="17"
+                                          Data="M 3,0 L 4,2 L 6,3 L 4,4 L 3,6 L 2,4 L 0,3 L 2,2 Z"
+                                          Fill="#D94EEAFF" RenderTransformOrigin="0.5,0.5">
+                                        <Path.RenderTransform><ScaleTransform x:Name="SuccessScaleTwo" /></Path.RenderTransform>
+                                    </Path>
+                                </Canvas>
+
+                                <Canvas x:Name="ErrorEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Ellipse Width="14" Height="14" Canvas.Left="47" Canvas.Top="5" Fill="#D9FF6B6B" />
+                                    <Rectangle Width="2" Height="6" RadiusX="1" Canvas.Left="53" Canvas.Top="8" Fill="White" />
+                                    <Ellipse Width="2" Height="2" Canvas.Left="53" Canvas.Top="15" Fill="White" />
+                                </Canvas>
+
+                                <Canvas x:Name="MeetingConnectingEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Ellipse x:Name="MeetingNodeOne" Width="5" Height="5" Canvas.Left="7" Canvas.Top="12" Fill="#D995B9FF">
+                                        <Ellipse.RenderTransform><TranslateTransform x:Name="MeetingNodeTranslateOne" /></Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <Ellipse x:Name="MeetingNodeTwo" Width="6" Height="6" Canvas.Left="51" Canvas.Top="8" Fill="#E8B6A8FF">
+                                        <Ellipse.RenderTransform><TranslateTransform x:Name="MeetingNodeTranslateTwo" /></Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <Ellipse x:Name="MeetingNodeThree" Width="4" Height="4" Canvas.Left="57" Canvas.Top="49" Fill="#BFD1C8FF">
+                                        <Ellipse.RenderTransform><TranslateTransform x:Name="MeetingNodeTranslateThree" /></Ellipse.RenderTransform>
+                                    </Ellipse>
+                                </Canvas>
+
+                                <Canvas x:Name="MeetingListeningEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Rectangle Width="3" Height="11" RadiusX="1.5" RadiusY="1.5" Canvas.Left="3" Canvas.Top="42" Fill="#C995B9FF" RenderTransformOrigin="0.5,1">
+                                        <Rectangle.RenderTransform><ScaleTransform x:Name="MeetingWaveScaleOne" ScaleY="0.35" /></Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle Width="3" Height="17" RadiusX="1.5" RadiusY="1.5" Canvas.Left="8" Canvas.Top="36" Fill="#E8A9C4FF" RenderTransformOrigin="0.5,1">
+                                        <Rectangle.RenderTransform><ScaleTransform x:Name="MeetingWaveScaleTwo" ScaleY="0.35" /></Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle Width="3" Height="13" RadiusX="1.5" RadiusY="1.5" Canvas.Left="13" Canvas.Top="40" Fill="#D995B9FF" RenderTransformOrigin="0.5,1">
+                                        <Rectangle.RenderTransform><ScaleTransform x:Name="MeetingWaveScaleThree" ScaleY="0.35" /></Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Ellipse Width="4" Height="4" Canvas.Left="53" Canvas.Top="18" Fill="#D9D1C8FF" />
+                                    <Ellipse Width="5" Height="5" Canvas.Left="58" Canvas.Top="25" Fill="#BFA9C4FF" />
+                                </Canvas>
+
+                                <Canvas x:Name="MeetingTranscribingEffect" Width="66" Height="66" Visibility="Collapsed">
+                                    <Ellipse Width="4" Height="4" Canvas.Left="4" Canvas.Top="40" Fill="#E895B9FF" />
+                                    <Rectangle x:Name="MeetingLaneOne" Width="12" Height="1.5" RadiusX="0.75" Canvas.Left="10" Canvas.Top="41" Fill="#D995B9FF" />
+                                    <Ellipse Width="4" Height="4" Canvas.Left="4" Canvas.Top="47" Fill="#E8A9C4FF" />
+                                    <Rectangle x:Name="MeetingLaneTwo" Width="17" Height="1.5" RadiusX="0.75" Canvas.Left="10" Canvas.Top="48" Fill="#D9A9C4FF" />
+                                    <Ellipse Width="4" Height="4" Canvas.Left="4" Canvas.Top="54" Fill="#E8D1C8FF" />
+                                    <Rectangle x:Name="MeetingLaneThree" Width="9" Height="1.5" RadiusX="0.75" Canvas.Left="10" Canvas.Top="55" Fill="#BFD1C8FF" />
+                                </Canvas>
+                            </Canvas>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,9,0">
+                    <Border x:Name="ModeBadge" Background="#2B2118" CornerRadius="5" Padding="7,3" HorizontalAlignment="Left">
+                        <TextBlock x:Name="ModeLabel" Text="日常输入 · 右 Alt" Foreground="#E6B779"
+                                   FontFamily="{DynamicResource UiTechnicalFont}" FontWeight="SemiBold" FontSize="10"
+                                   TextWrapping="NoWrap" />
+                    </Border>
+                    <TextBlock x:Name="OverlayTitle" Text="连接中" Foreground="#F4F6F9"
+                               FontFamily="{DynamicResource UiDisplayFont}" FontWeight="SemiBold" FontSize="17"
+                               TextWrapping="NoWrap" Margin="0,6,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="1,6,0,0">
+                        <Ellipse x:Name="DotOne" Width="4" Height="4" Fill="#D59A59" Margin="0,0,5,0" />
+                        <Ellipse x:Name="DotTwo" Width="4" Height="4" Fill="#D59A59" Margin="0,0,5,0" />
+                        <Ellipse x:Name="DotThree" Width="4" Height="4" Fill="#D59A59" />
+                        <TextBlock x:Name="OverlayHint" Text="再按右 Alt 结束" Foreground="#8D96A3"
+                                   FontFamily="{DynamicResource UiTextFont}" FontSize="9.5" TextWrapping="NoWrap"
+                                   Margin="8,-5,0,0" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Border x:Name="HotkeyBox" Grid.Column="3" Width="58" Height="62" Background="#C90D1015"
+                        BorderBrush="#43505F" BorderThickness="1" CornerRadius="11" VerticalAlignment="Center">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="HotkeyLabel" Text="快捷键" Foreground="#6F7884"
+                                   FontFamily="{DynamicResource UiTechnicalFont}" FontSize="8.5"
+                                   TextWrapping="NoWrap" HorizontalAlignment="Center" />
+                        <TextBlock x:Name="HotkeyText" Text="右 Alt" Foreground="#F2C184"
+                                   FontFamily="{DynamicResource UiDisplayFont}" FontWeight="SemiBold" FontSize="15"
+                                   TextWrapping="NoWrap" HorizontalAlignment="Center" Margin="0,5,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

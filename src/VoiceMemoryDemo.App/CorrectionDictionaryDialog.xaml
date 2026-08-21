@@ -1,0 +1,196 @@
+<Window x:Class="VoiceMemoryDemo.App.CorrectionDictionaryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="纠错词典" Width="980" Height="740" MinWidth="860" MinHeight="650"
+        ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        Background="{StaticResource WindowBrush}" Foreground="{StaticResource PrimaryTextBrush}"
+        Loaded="Window_Loaded">
+    <Grid Margin="22">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="196" />
+            <RowDefinition Height="16" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="14" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border CornerRadius="20" ClipToBounds="True" BorderBrush="#354E6D" BorderThickness="1">
+            <Grid>
+                <Image Source="Assets/ui-dictionary-header-xiaoye-v2.png" Stretch="UniformToFill"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                <Border>
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Color="#10101725" Offset="0" />
+                            <GradientStop Color="#48101725" Offset="0.34" />
+                            <GradientStop Color="#E80B1120" Offset="0.56" />
+                            <GradientStop Color="#F70A0F1B" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <StackPanel Margin="430,0,34,0" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Width="34" Height="3" Fill="#62D8EB" RadiusX="1.5" VerticalAlignment="Center" />
+                        <TextBlock Text="MEMORY ARCHIVE" Foreground="#6D91A7" FontSize="9" FontWeight="SemiBold" Margin="10,-2,0,0" />
+                    </StackPanel>
+                    <TextBlock Text="纠错词典" FontSize="30" FontWeight="SemiBold" Margin="0,10,0,0" />
+                    <TextBlock Text="维护小夜记住的专有词写法，转写时会优先本地纠正。"
+                               Foreground="#B7C5D5" FontSize="12" Margin="0,7,0,0" />
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Border Background="#1B2B40" BorderBrush="#4D7393" BorderThickness="1" CornerRadius="8" Padding="11,5">
+                            <TextBlock x:Name="CorrectionCountText" Text="正在读取…" Foreground="#C8F4FF" FontSize="11" />
+                        </Border>
+                        <TextBlock Text="仅保存在这台电脑" Foreground="#8292A5" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="310" />
+            </Grid.ColumnDefinitions>
+
+            <Border Background="#B80E1520" BorderBrush="#2C3E54" BorderThickness="1" CornerRadius="15" Padding="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="12" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="已保存词条" FontSize="17" FontWeight="SemiBold" />
+                            <TextBlock Text="点击编辑可把词条带到右侧修改" Foreground="#77879B" FontSize="10" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="34" Height="34" CornerRadius="17" Background="#142838" BorderBrush="#315D77" BorderThickness="1">
+                            <TextBlock Text="≡" Foreground="#62D8EB" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0" />
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <ListBox x:Name="CorrectionList" Background="Transparent" BorderThickness="0"
+                                 Foreground="{StaticResource PrimaryTextBrush}" HorizontalContentAlignment="Stretch"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0,0,0,6" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#B9121B29" BorderBrush="#263A50" BorderThickness="1" CornerRadius="10" Padding="14,11"
+                                            Loaded="LocalizedElement_Loaded">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="38" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="经常识别成" Foreground="#718298" FontSize="9" />
+                                                <TextBlock Text="{Binding Spoken}" FontSize="13" FontWeight="SemiBold" Margin="0,4,0,0" />
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Text="→" Foreground="#62D8EB" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="你希望写成" Foreground="#718298" FontSize="9" />
+                                                <TextBlock Text="{Binding Preferred}" FontSize="13" FontWeight="SemiBold" Foreground="#CFF6FF" Margin="0,4,0,0" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0">
+                                                <Button Content="编辑" Tag="{Binding}" Click="EditCorrectionButton_Click" Padding="10,6" />
+                                                <Button Content="删除" Tag="{Binding}" Click="DeleteCorrectionButton_Click" Padding="10,6" Margin="6,0,0,0"
+                                                        Foreground="#FF98A2" Background="#2D1821" BorderBrush="#66313D" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <Border x:Name="EmptyPanel" Background="#7B101824" BorderBrush="#2F435A" BorderThickness="1" CornerRadius="12" Visibility="Collapsed">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="✦" Foreground="#62D8EB" FontSize="25" HorizontalAlignment="Center" />
+                                <TextBlock Text="还没有纠错词" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,0" />
+                                <TextBlock Text="在右侧新增第一条，小夜会在转写前先进行本地替换。" Foreground="#7C8CA0" FontSize="10" Margin="0,6,0,0" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border x:Name="DeleteConfirmationPanel" Grid.Row="3" Background="#2D1821" BorderBrush="#713745" BorderThickness="1"
+                            CornerRadius="9" Padding="12,9" Margin="0,8,0,0" Visibility="Collapsed">
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <TextBlock x:Name="DeleteConfirmationText" Text="确认删除这条纠错？" Foreground="#FFC1C8" VerticalAlignment="Center" />
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button Content="取消" Click="CancelDeleteButton_Click" Padding="10,6" />
+                                <Button Content="确认删除" Click="ConfirmDeleteButton_Click" Padding="10,6" Margin="6,0,0,0"
+                                        Foreground="#FF9AA2" Background="#47202A" BorderBrush="#843D4B" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" BorderBrush="#31536E" BorderThickness="1" CornerRadius="15" Padding="18">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#18283A" Offset="0" />
+                        <GradientStop Color="#101722" Offset="0.5" />
+                        <GradientStop Color="#0D131C" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="30" Height="30" CornerRadius="15" Background="#153446" BorderBrush="#377A98" BorderThickness="1">
+                                <TextBlock Text="+" Foreground="#62D8EB" FontSize="19" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" />
+                            </Border>
+                            <StackPanel Margin="10,0,0,0">
+                                <TextBlock Text="编辑词条" FontSize="17" FontWeight="SemiBold" />
+                                <TextBlock Text="新增或修改一条本地纠错习惯" Foreground="#7F91A5" FontSize="9" Margin="0,3,0,0" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                        <TextBlock Text="经常识别成" Foreground="#91A2B6" FontSize="11" />
+                        <TextBox x:Name="SpokenTextBox" MinHeight="42" Margin="0,7,0,0" />
+                        <Grid Height="34">
+                            <TextBlock Text="↓" Foreground="#62D8EB" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock Text="你希望写成" Foreground="#91A2B6" FontSize="11" />
+                        <TextBox x:Name="PreferredTextBox" MinHeight="42" Margin="0,7,0,0" />
+                        <TextBlock Text="例如：“扣的可斯” → “Codex”" Foreground="#63768B" FontSize="9" Margin="2,10,0,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2">
+                        <TextBlock x:Name="StatusText" Foreground="#75D8AA" FontSize="10" Margin="2,0,0,8" TextWrapping="Wrap" />
+                        <Button x:Name="SaveCorrectionButton" Content="新增纠错" Click="SaveCorrectionButton_Click"
+                                MinHeight="42" Background="#174258" BorderBrush="#49A9CC" Foreground="#D8F8FF" FontWeight="SemiBold" />
+                        <Button x:Name="CancelEditButton" Content="取消编辑" Click="CancelEditButton_Click"
+                                Visibility="Collapsed" Margin="0,8,0,0" MinHeight="38" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Ellipse Width="7" Height="7" Fill="#5ED79A" Margin="0,0,8,0" />
+                <TextBlock Text="词条只保存在本机，不会上传原始内容" Foreground="#74869A" FontSize="10" />
+            </StackPanel>
+            <Button Grid.Column="1" Content="完成" Click="CloseButton_Click" MinWidth="100" IsDefault="True" />
+        </Grid>
+    </Grid>
+</Window>

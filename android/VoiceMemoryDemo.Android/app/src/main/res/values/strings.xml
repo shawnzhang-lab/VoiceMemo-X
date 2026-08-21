@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">速说速记X</string>
+    <string name="tile_label">速说速记X</string>
+    <string name="notification_channel">语音输入状态</string>
+    <string name="notification_channel_description">显示录音、转写和完成状态</string>
+</resources>
