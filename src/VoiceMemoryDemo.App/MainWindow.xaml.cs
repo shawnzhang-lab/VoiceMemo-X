@@ -1446,8 +1446,11 @@ public partial class MainWindow : Window
             : UiLanguageService.Text(
                 "DeepSeek Flash + 你的本地记忆 + 目标语言",
                 "DeepSeek Flash + local memory + target language");
-        EnableTranslationCheckBox.IsEnabled = !enabled;
-        TargetLanguageComboBox.IsEnabled = !enabled;
+        // Right Alt dictation and Left Alt meeting capture are independent
+        // features now. The legacy meeting-mode switch must not disable the
+        // daily translation controls when the UI language is refreshed.
+        EnableTranslationCheckBox.IsEnabled = true;
+        TargetLanguageComboBox.IsEnabled = true;
         ToggleButton.Content = enabled
             ? UiLanguageService.Text(
                 "开始会议记录（也可以直接按右 Alt）",

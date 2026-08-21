@@ -137,6 +137,7 @@ internal static class Program
         AssertTagOrder(output, expectedOutputTags, "output");
         AssertContrast(input, "input");
         AssertContrast(output, "output");
+        AssertUiLanguageSwitchKeepsDailyControlsEnabled(window, output);
 
         foreach (var uiLanguage in new[] { UiLanguageService.Chinese, UiLanguageService.English })
         {
@@ -189,6 +190,31 @@ internal static class Program
         UiLanguageService.SetLanguage(originalUiLanguage);
         UiLanguageService.Apply(window);
         window.Hide();
+    }
+
+    private static void AssertUiLanguageSwitchKeepsDailyControlsEnabled(MainWindow window, ComboBox output)
+    {
+        var meetingMode = (CheckBox)window.FindName("MeetingModeCheckBox");
+        var translation = (CheckBox)window.FindName("EnableTranslationCheckBox");
+        var selectedOutput = output.SelectedItem;
+        var applyUiLanguage = typeof(MainWindow).GetMethod(
+            "ApplyUiLanguage",
+            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+            ?? throw new InvalidOperationException("ApplyUiLanguage was not found.");
+
+        meetingMode.IsChecked = true;
+        foreach (var uiLanguage in new[] { UiLanguageService.English, UiLanguageService.Chinese })
+        {
+            UiLanguageService.SetLanguage(uiLanguage);
+            applyUiLanguage.Invoke(window, null);
+            if (!translation.IsEnabled || !output.IsEnabled)
+                throw new InvalidOperationException(
+                    "Switching the client language disabled the daily translation controls.");
+            if (!ReferenceEquals(output.SelectedItem, selectedOutput))
+                throw new InvalidOperationException(
+                    "Switching the client language changed the selected output language.");
+        }
+        meetingMode.IsChecked = false;
     }
 
     private static void AssertTagOrder(ComboBox comboBox, IReadOnlyList<string> expected, string name)
