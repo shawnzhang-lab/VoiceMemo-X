@@ -42,7 +42,7 @@ Imported audio/video also uses Speaker 2.0. The local speaker-count router remai
 
 ## Build from source
 
-Windows users can download `VoiceMemo-X-0.9.11-win-x64-lite.zip` and its matching `.sha256` file from [Releases](https://github.com/shawnzhang-lab/VoiceMemo-X/releases). The Lite archive contains no local ONNX model weights. Cloud dictation, translation, and meeting reports remain available, while local vector retrieval and the local speaker-count pre-check degrade gracefully.
+Windows users can download `VoiceMemo-X-0.9.12-win-x64-lite.zip` and its matching `.sha256` file from [Releases](https://github.com/shawnzhang-lab/VoiceMemo-X/releases). The Lite archive contains no local ONNX model weights. Cloud dictation, translation, and meeting reports remain available, while local vector retrieval and the local speaker-count pre-check degrade gracefully.
 
 Requirements: Windows 10/11 x64, the .NET 8 SDK, Tencent Cloud ASR credentials, and a funded DeepSeek API account.
 
@@ -79,4 +79,4 @@ See [PRIVACY.md](PRIVACY.md) before use. Do not ship a Tencent main-account Secr
 
 Source code is Copyright 2026 Xiang Zhang and licensed under Apache-2.0. Xiaoye character/UI artwork is available only for personal and other non-commercial use under [ASSET_LICENSE.md](ASSET_LICENSE.md); commercial distributions must replace it. Model weights, private evaluation corpora, internal results, build outputs, and unused character candidates are excluded from Git. Third-party notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Current version: `0.9.11` — runnable demo, not a production hosted service.
+Current version: `0.9.12` — runnable demo, not a production hosted service.

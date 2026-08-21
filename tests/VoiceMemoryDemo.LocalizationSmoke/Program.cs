@@ -121,6 +121,7 @@ internal static class Program
 
     private static void AssertLanguageComboBoxes()
     {
+        var originalUiLanguage = UiLanguageService.CurrentLanguage;
         var window = new MainWindow();
         var input = (ComboBox)window.FindName("InputLanguageComboBox");
         var output = (ComboBox)window.FindName("TargetLanguageComboBox");
@@ -151,6 +152,8 @@ internal static class Program
                 : new[] { "中文", "英语 English", "日语 日本語", "韩语 한국어", "法语 Français", "德语 Deutsch", "西班牙语 Español", "俄语 Русский" }, $"{uiLanguage} output");
         }
 
+        UiLanguageService.SetLanguage(UiLanguageService.Chinese);
+        UiLanguageService.Apply(window);
         input.SelectedIndex = 0;
         output.SelectedIndex = 1;
         if ((input.SelectedItem as ComboBoxItem)?.Tag as string != "zh-PY" ||
@@ -160,9 +163,19 @@ internal static class Program
         window.ApplyTemplate();
         input.ApplyTemplate();
         output.ApplyTemplate();
-        AssertSelectedTextBrush(input, "input");
-        AssertSelectedTextBrush(output, "output");
+        AssertSelectedText(input, "自动（中 / 英 / 粤）", "input");
+        AssertSelectedText(output, "英语 English", "output");
 
+        output.SelectedIndex = 0;
+        output.UpdateLayout();
+        AssertSelectedText(output, "中文", "output after changing to Chinese");
+
+        output.SelectedIndex = 1;
+        output.UpdateLayout();
+        AssertSelectedText(output, "英语 English", "output after changing back to English");
+
+        UiLanguageService.SetLanguage(originalUiLanguage);
+        UiLanguageService.Apply(window);
         window.Hide();
     }
 
@@ -203,15 +216,17 @@ internal static class Program
             throw new InvalidOperationException($"The {name} dropdown selected text does not meet the 4.5:1 contrast target.");
     }
 
-    private static void AssertSelectedTextBrush(ComboBox comboBox, string name)
+    private static void AssertSelectedText(ComboBox comboBox, string expectedText, string name)
     {
         var toggle = comboBox.Template.FindName("DropDownToggle", comboBox) as ToggleButton
             ?? throw new InvalidOperationException($"The {name} dropdown toggle template is missing.");
         toggle.ApplyTemplate();
-        var presenter = toggle.Template.FindName("SelectedContentPresenter", toggle) as ContentPresenter
-            ?? throw new InvalidOperationException($"The {name} selected-content presenter is missing.");
-        var selectedForeground = TextElement.GetForeground(presenter);
-        if (selectedForeground is not SolidColorBrush selectedBrush ||
+        var selectedText = toggle.Template.FindName("SelectedLanguageText", toggle) as TextBlock
+            ?? throw new InvalidOperationException($"The {name} selected-language text is missing.");
+        if (!string.Equals(selectedText.Text, expectedText, StringComparison.Ordinal))
+            throw new InvalidOperationException(
+                $"The {name} visible text is '{selectedText.Text}', expected '{expectedText}'.");
+        if (selectedText.Foreground is not SolidColorBrush selectedBrush ||
             comboBox.Foreground is not SolidColorBrush comboBrush ||
             selectedBrush.Color != comboBrush.Color)
             throw new InvalidOperationException($"The {name} selected text is not inheriting the dark-theme foreground.");
