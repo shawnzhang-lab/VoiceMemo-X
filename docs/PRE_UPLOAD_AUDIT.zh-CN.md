@@ -1,7 +1,7 @@
 # GitHub 上传前整体排查
 
 日期：2026-08-21
-版本：0.9.12
+版本：0.9.13
 结论：**技术源码包与许可证边界通过；项目所有者已授权发布源码。最终角色已完成人工视觉复核，可公开，但该复核不是法律意见。**
 
 ## 1. 已通过
@@ -57,7 +57,7 @@
 
 源码仓库和 Lite Windows ZIP 均排除了模型权重，因此可以发布。包含 E5、Silero VAD、CAMPPlus、pyannote 等模型权重的完整 Windows ZIP 仍需逐文件确认权重许可证、来源 revision、SHA-256 和随包 NOTICE。未完成前：
 
-- 只上传从公开源码包干净构建的 `VoiceMemo-X-0.9.12-win-x64-lite.zip`；
+- 只上传从公开源码包干净构建的 `VoiceMemo-X-0.9.13-win-x64-lite.zip`；
 - 不上传任何包含未复核模型权重的完整包；
 - 不上传旧 APK 作为正式版本；
 - Release notes 明确 Lite 包的降级边界和 SmartScreen 风险。

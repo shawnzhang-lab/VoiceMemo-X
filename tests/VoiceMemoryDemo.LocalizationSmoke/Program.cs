@@ -166,6 +166,18 @@ internal static class Program
         AssertSelectedText(input, "自动（中 / 英 / 粤）", "input");
         AssertSelectedText(output, "英语 English", "output");
 
+        input.SelectedIndex = 2;
+        input.UpdateLayout();
+        AssertSelectedText(input, "英语 English", "input after changing to English");
+
+        input.SelectedIndex = 1;
+        input.UpdateLayout();
+        AssertSelectedText(input, "中文普通话", "input after changing to Mandarin");
+
+        input.SelectedIndex = 0;
+        input.UpdateLayout();
+        AssertSelectedText(input, "自动（中 / 英 / 粤）", "input after changing back to auto");
+
         output.SelectedIndex = 0;
         output.UpdateLayout();
         AssertSelectedText(output, "中文", "output after changing to Chinese");
@@ -218,10 +230,7 @@ internal static class Program
 
     private static void AssertSelectedText(ComboBox comboBox, string expectedText, string name)
     {
-        var toggle = comboBox.Template.FindName("DropDownToggle", comboBox) as ToggleButton
-            ?? throw new InvalidOperationException($"The {name} dropdown toggle template is missing.");
-        toggle.ApplyTemplate();
-        var selectedText = toggle.Template.FindName("SelectedLanguageText", toggle) as TextBlock
+        var selectedText = comboBox.Template.FindName("SelectedLanguageText", comboBox) as TextBlock
             ?? throw new InvalidOperationException($"The {name} selected-language text is missing.");
         if (!string.Equals(selectedText.Text, expectedText, StringComparison.Ordinal))
             throw new InvalidOperationException(
